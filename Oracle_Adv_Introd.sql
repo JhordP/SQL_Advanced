@@ -20,3 +20,12 @@ CREATE TABLE CHILDSTAT_COUNT_BY_GENDER AS
 SELECT gender, COUNT(gender) quantity FROM CHILDSTAT GROUP BY gender
 
 SELECT * FROM CHILDSTAT_COUNT_BY_GENDER
+
+------------------------------------------------------------------------
+--AGGREGATE (COUNT)
+SELECT A.*, B.quantity
+FROM CHILDSTAT A INNER JOIN CHILDSTAT_COUNT_BY_GENDER B
+ON A.gender = B.gender;
+--VS
+--ANALYTIC (COUNT)
+SELECT A.*, COUNT(*) OVER (PARTITION BY A.gender) AS quantity  FROM CHILDSTAT A

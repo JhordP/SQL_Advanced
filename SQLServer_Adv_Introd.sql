@@ -24,3 +24,22 @@ SELECT gender, COUNT(gender) quantity INTO CHILDSTAT_COUNT_BY_GENDER FROM CHILDS
 SELECT * FROM CHILDSTAT_COUNT_BY_GENDER;
 
 SELECT gender, COUNT(gender) quantity FROM CHILDSTAT GROUP BY gender;
+
+------------------------------------------------------------------------
+--AGGREGATE (COUNT)
+SELECT A.*, B.quantity
+FROM CHILDSTAT A INNER JOIN CHILDSTAT_COUNT_BY_GENDER B
+ON A.gender = B.gender;
+
+SELECT gender, COUNT(gender) quantity INTO CHILDSTAT_COUNT_BY_GENDER FROM CHILDSTAT GROUP BY gender
+SELECT * FROM CHILDSTAT_COUNT_BY_GENDER;
+
+SELECT SUM(weight) AS sum_weight, gender FROM CHILDSTAT GROUP BY gender
+--VS
+--ANALYTIC (COUNT)
+SELECT A.*, COUNT(*) OVER (PARTITION BY A.gender) AS quantity  FROM CHILDSTAT A;
+
+--Sums by weight accumulating by gender
+SELECT A.gender, A.firstname, A.weight, 
+SUM(A.weight) OVER (PARTITION BY A.gender ORDER BY A.weight) AS sum_weight
+FROM CHILDSTAT A ORDER BY A.gender, A.weight;
